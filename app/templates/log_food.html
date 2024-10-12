@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+
+{% block title %}Log Food{% endblock %}
+
+{% block content %}
+    <h2>Log a Brand Name Food</h2>
+    <form method="POST">
+        {{ form.hidden_tag() }}
+        <input type="text" name="food_item" placeholder="Enter brand name food" required>
+        <button type="submit">Log Food</button>
+    </form>
+
+    {% if nutrition_info %}
+        <h3>Nutrition Information for {{ food_item }}</h3>
+        <ul>
+            <li>Calories: {{ nutrition_info.ENERC_KCAL }} kcal</li>
+            <li>Protein: {{ nutrition_info.PROCNT }} g</li>
+            <li>Carbohydrates: {{ nutrition_info.CHOCDF }} g</li>
+            <li>Fat: {{ nutrition_info.FAT }} g</li>
+        </ul>
+    {% endif %}
+    
+    {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+            {% for category, message in messages %}
+                <div class="alert alert-{{ category }}">{{ message }}</div>
+            {% endfor %}
+        {% endif %}
+    {% endwith %}
+{% endblock %}
