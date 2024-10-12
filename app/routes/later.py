@@ -4,6 +4,7 @@ from wtforms import StringField, PasswordField, SubmitField
 from wtforms.validators import DataRequired, Length, Email, EqualTo
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask_login import LoginManager, UserMixin, login_user, logout_user, login_required, current_user
+from harmful_ingredients import check_harmful_ingredients, get_ingredient_risks
 #API we will use to get food facts
 NUTRITIONIX_APP_ID = '38216dbf'
 NUTRITIONIX_API_KEY = 'efc68bcd7238c449074ccee19e84e2c6'
