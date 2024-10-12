@@ -4,6 +4,9 @@ from wtforms import StringField, PasswordField, SubmitField
 from wtforms.validators import DataRequired, Length, Email, EqualTo
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask_login import LoginManager, UserMixin, login_user, logout_user, login_required, current_user
+#API we will use to get food facts
+EDAMAM_APP_ID = 'e19d64b6'
+EDAMAM_APP_KEY = '2d17a8adc75926ed22284fd2ad2a1009'
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'yoursecretkey'  # Change this for production
@@ -95,6 +98,29 @@ def logout():
     logout_user()
     flash('You have been logged out.', 'info')
     return redirect(url_for('login'))
+
+# Route for logging food and fetching nutrition information
+@app.route('/log-food', methods=['GET', 'POST'])
+def log_food():
+    if request.method == 'POST':
+        food_item = request.form.get('food_item')
+        if food_item:
+            # Call Edamam API to get nutrition data
+            api_url = f"https://api.edamam.com/api/food-database/v2/parser?ingr={food_item}&app_id={EDAMAM_APP_ID}&app_key={EDAMAM_APP_KEY}"
+            response = requests.get(api_url)
+            data = response.json()
+
+            # Check if we have a valid response with nutrition data
+            if 'parsed' in data and data['parsed']:
+                nutrition_info = data['parsed'][0]['food']['nutrients']
+                return render_template('log_food.html', food_item=food_item, nutrition_info=nutrition_info)
+            else:
+                flash('No nutrition data found for this item. Please try another one.', 'danger')
+        else:
+            flash('Please enter a valid food item.', 'warning')
+
+    return render_template('log_food.html')
+
 
 if __name__ == '__main__':
     app.run(debug=True)
