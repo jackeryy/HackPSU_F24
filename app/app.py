@@ -5,8 +5,8 @@ from wtforms.validators import DataRequired, Length, Email, EqualTo
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask_login import LoginManager, UserMixin, login_user, logout_user, login_required, current_user
 #API we will use to get food facts
-EDAMAM_APP_ID = 'e19d64b6'
-EDAMAM_APP_KEY = '2d17a8adc75926ed22284fd2ad2a1009'
+NUTRITIONIX_APP_ID = '38216dbf'
+NUTRITIONIX_API_KEY = 'efc68bcd7238c449074ccee19e84e2c6'
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'yoursecretkey'  # Change this for production
@@ -16,7 +16,7 @@ login_manager.init_app(app)
 login_manager.login_view = 'login'
 
 # In-memory user store (in real scenarios, use a database)
-users = {}
+#users = {}
 
 # User model
 class User(UserMixin):
@@ -100,19 +100,27 @@ def logout():
     return redirect(url_for('login'))
 
 # Route for logging food and fetching nutrition information
-@app.route('/log-food', methods=['GET', 'POST'])
 def log_food():
     if request.method == 'POST':
         food_item = request.form.get('food_item')
         if food_item:
-            # Call Edamam API to get nutrition data
-            api_url = f"https://api.edamam.com/api/food-database/v2/parser?ingr={food_item}&app_id={EDAMAM_APP_ID}&app_key={EDAMAM_APP_KEY}"
-            response = requests.get(api_url)
+            # Call Nutritionix API to get nutrition data
+            api_url = 'https://trackapi.nutritionix.com/v2/natural/nutrients'
+            headers = {
+                'x-app-id': NUTRITIONIX_APP_ID,
+                'x-app-key': NUTRITIONIX_API_KEY,
+                'Content-Type': 'application/json'
+            }
+            body = {
+                "query": food_item
+            }
+
+            response = requests.post(api_url, json=body, headers=headers)
             data = response.json()
 
             # Check if we have a valid response with nutrition data
-            if 'parsed' in data and data['parsed']:
-                nutrition_info = data['parsed'][0]['food']['nutrients']
+            if 'foods' in data and data['foods']:
+                nutrition_info = data['foods'][0]
                 return render_template('log_food.html', food_item=food_item, nutrition_info=nutrition_info)
             else:
                 flash('No nutrition data found for this item. Please try another one.', 'danger')
