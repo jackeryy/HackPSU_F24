@@ -1,17 +1,20 @@
-{% extends "base.html" %}
-
-{% block title %}Login{% endblock %}
-
-{% block content %}
-    <h2>Login</h2>
+<!-- /app/templates/login.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login</title>
+</head>
+<body>
+    <h1>Login</h1>
     <form method="POST">
         {{ form.hidden_tag() }}
-        <div>
-            {{ form.email.label }}<br>
-            {{ form.email(size=32) }}<br>
-            {{ form.password.label }}<br>
-            {{ form.password(size=32) }}<br>
-            {{ form.submit() }}
-        </div>
+        <p>{{ form.email.label }}<br>{{ form.email(size=32) }}</p>
+        <p>{{ form.password.label }}<br>{{ form.password(size=32) }}</p>
+        <p>{{ form.submit() }}</p>
     </form>
-{% endblock %}
+
+    <p>Don't have an account? <a href="{{ url_for('auth.register') }}">Sign up here</a></p>
+</body>
+</html>

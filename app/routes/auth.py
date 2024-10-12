@@ -1,13 +1,9 @@
-# /app/routes/auth.py
-
-from flask import Blueprint, render_template, redirect, url_for, flash
+from flask import Blueprint, render_template, redirect, url_for, flash, current_app
+from flask_login import login_user, logout_user, login_required, current_user
+from app import User
 from flask_wtf import FlaskForm
 from wtforms import StringField, PasswordField, SubmitField
 from wtforms.validators import DataRequired, Length, Email, EqualTo
-from flask_login import login_user, logout_user, login_required
-from app import User, create_app
-
-app = create_app()
 
 auth_blueprint = Blueprint('auth', __name__)
 
@@ -26,6 +22,32 @@ class LoginForm(FlaskForm):
     password = PasswordField('Password', validators=[DataRequired()])
     submit = SubmitField('Login')
 
+# Root route that shows the login page
+@auth_blueprint.route('/', methods=['GET', 'POST'])
+def login():
+    form = LoginForm()
+    if form.validate_on_submit():
+        email = form.email.data
+        password = form.password.data
+
+        try:
+            # Sign in using Pyrebase (which checks the password)
+            user = current_app.firebase_auth.sign_in_with_email_and_password(email, password)
+            user_id = user['localId']
+
+            # Retrieve the user profile from Firestore
+            user_doc = current_app.firestore_db.collection('users').document(user_id).get()
+            if user_doc.exists:
+                user_data = user_doc.to_dict()
+                login_user(User(user_id, user_data['first_name'], user_data['last_name'], user_data['email']))
+                return redirect(url_for('home'))
+            else:
+                flash('User profile not found.', 'danger')
+        except Exception as e:
+            flash(f'Login failed: {e}', 'danger')
+
+    return render_template('login.html', form=form)
+
 # Registration route
 @auth_blueprint.route('/register', methods=['GET', 'POST'])
 def register():
@@ -37,12 +59,14 @@ def register():
         password = form.password.data
 
         try:
-            # Register user with Firebase Authentication
-            user = app.firebase_auth.create_user_with_email_and_password(email, password)
-            user_id = user['localId']
+            # Create user with Firebase Admin SDK authentication
+            user = current_app.firebase_auth.create_user(
+                email=email, password=password
+            )
+            user_id = user.uid
 
             # Store user profile in Firestore
-            app.firestore_db.collection('users').document(user_id).set({
+            current_app.firestore_db.collection('users').document(user_id).set({
                 'first_name': first_name,
                 'last_name': last_name,
                 'email': email
@@ -54,30 +78,11 @@ def register():
             flash(f'Registration failed: {e}', 'danger')
 
     return render_template('register.html', form=form)
-
-# Login route
-@auth_blueprint.route('/login', methods=['GET', 'POST'])
-def login():
-    form = LoginForm()
-    if form.validate_on_submit():
-        email = form.email.data
-        password = form.password.data
-
-        try:
-            # Authenticate user with Firebase
-            user = app.firebase_auth.sign_in_with_email_and_password(email, password)
-            user_id = user['localId']
-
-            # Retrieve user profile from Firestore
-            user_doc = app.firestore_db.collection('users').document(user_id).get()
-            if user_doc.exists:
-                user_data = user_doc.to_dict()
-                login_user(User(user_id, user_data['first_name'], user_data['last_name'], user_data['email']))
-                return redirect(url_for('home'))
-        except Exception as e:
-            flash(f'Login failed: {e}', 'danger')
-
-    return render_template('login.html', form=form)
+# Home route
+@auth_blueprint.route('/home')
+@login_required
+def home():
+    return render_template('home.html', name=current_user.first_name)
 
 # Logout route
 @auth_blueprint.route('/logout')
