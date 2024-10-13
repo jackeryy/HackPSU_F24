@@ -72,8 +72,8 @@
                         {% if food_logs_by_day[date] %}
                             <ul>
                                 {% for log in food_logs_by_day[date] %}
-                                <li>{{ log.food_name }} - <a href="{{ url_for('food.facts', food_name=log.food_name) }}"></a>
-                                    {% if log.status == 0 %}Good{% elif log.status == 1 %}Medium{% elif log.status == 2 %}Bad{% endif %}
+                                <li>{{ log.food_name }} - <a href="{{ url_for('food.facts', food_name=log.food_name) }}">{% if log.status == 0 %}Good{% elif log.status == 1 %}Medium{% elif log.status == 2 %}Bad{% endif %}</a>
+                                    
                                 </a> at {{ log.time }}</li>
                                 {% endfor %}
                             </ul>
