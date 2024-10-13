@@ -61,7 +61,6 @@
                     <th>{{ date }}</th>
                     {% endfor %}
                 </tr>
-            </thead>
             <tbody>
                 <!-- Display food logs for each day -->
                 <tr>
@@ -70,7 +69,9 @@
                         {% if food_logs_by_day[date] %}
                             <ul>
                                 {% for log in food_logs_by_day[date] %}
-                                <li>{{ log.food_name }} - <span class="dot {% if log.status == 0 %}green{% elif log.status == 1 %}yellow{% elif log.status == 2 %}red{% endif %}"></span> at {{ log.time }}</li>
+                                <li>{{ log.food_name }} - <a href="{{ url_for('facts', ingredients=log.harmful_ingredients) }}"></a>
+                                    {% if log.status == 0 %}Good{% elif log.status == 1 %}Medium{% elif log.status == 2 %}Bad{% endif %}
+                                </a> at {{ log.time }}</li>
                                 {% endfor %}
                             </ul>
                         {% else %}
