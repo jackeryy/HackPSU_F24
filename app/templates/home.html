@@ -1,8 +1,85 @@
-{% extends "base.html" %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Home</title>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+<body>
 
-{% block title %}Home{% endblock %}
+    <!-- Header and Navigation -->
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <a class="navbar-brand" href="#">Nutrition Tracker</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav ml-auto">
+                <li class="nav-item">
+                    <a class="nav-link" href="{{ url_for('auth.profile') }}">Profile</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{{ url_for('auth.edit_stats') }}">Edit Stats</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{{ url_for('auth.logout') }}">Logout</a>
+                </li>
+            </ul>
+        </div>
+    </nav>
 
-{% block content %}
-    <h2>Welcome, {{ name }}!</h2>
-    <p>You are now logged in.</p>
-{% endblock %}
+    <!-- Main Content -->
+    <div class="container mt-5">
+        <div class="jumbotron">
+            <h1 class="display-4">Welcome, {{ name }}!</h1>
+            <p class="lead">Track your daily nutritional intake and keep an eye on your stats.</p>
+            <hr class="my-4">
+            <p>Below, you can log your food and drinks, as well as view and edit your personal health stats.</p>
+        </div>
+
+        <!-- Section to log food and drink -->
+        <div class="card mb-5">
+            <div class="card-header">
+                Log Your Food and Drinks
+            </div>
+            <div class="card-body">
+                <form method="POST" action="{{ url_for('auth.log_food') }}">
+                    <div class="form-group">
+                        <label for="food">Food/Drink Name</label>
+                        <input type="text" class="form-control" id="food" name="food" placeholder="Enter food or drink" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="calories">Calories</label>
+                        <input type="number" class="form-control" id="calories" name="calories" placeholder="Enter calories" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="time">Time of Consumption</label>
+                        <input type="datetime-local" class="form-control" id="time" name="time" required>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Log Entry</button>
+                </form>
+            </div>
+        </div>
+
+        <!-- Section to view personal stats -->
+        <div class="card mb-5">
+            <div class="card-header">
+                Your Health Stats
+            </div>
+            <div class="card-body">
+                <p>Here you can see and edit your personal health stats:</p>
+                <ul>
+                    <li>Weight: {{ current_user.weight }} kg</li>
+                    <li>Height: {{ current_user.height }} cm</li>
+                    <li>Age: {{ current_user.age }} years</li>
+                    <li>Calories consumed today: {{ current_user.daily_calories }} kcal</li>
+                </ul>
+                <a href="{{ url_for('auth.edit_stats') }}" class="btn btn-secondary">Edit Stats</a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer mt-auto py-

@@ -32,7 +32,7 @@ def create_app():
     def load_user(user_id):
         # Fetch user from Firestore by ID
         user_doc = app.firestore_db.collection('users').document(user_id).get()
-        if user_doc.exists():
+        if user_doc.exists:
             user_data = user_doc.to_dict()
             return User(user_id, user_data['first_name'], user_data['last_name'], user_data['email'])
         return None
