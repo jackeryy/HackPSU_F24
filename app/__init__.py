@@ -48,4 +48,7 @@ def create_app():
     from app.routes.food import food_blueprint        # Food logging blueprint
     app.register_blueprint(food_blueprint)
 
+    from app.routes.ai import ai_blueprint
+    app.register_blueprint(ai_blueprint)
+
     return app

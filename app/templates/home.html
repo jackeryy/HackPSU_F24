@@ -5,7 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Home - Nutrition Tracker</title>
     <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <script src="{{ url_for('static', filename='script.js') }}"></script>
 </head>
 <body>
 
@@ -17,6 +18,9 @@
         </button>
         <div class="collapse navbar-collapse" id="navbarNav">
             <ul class="navbar-nav ml-auto">
+                <li class="nav-item">
+                    <a class="nav-link" href="{{ url_for('auth.home') }}">Home</a> <!-- Home Page Link -->
+                </li>
                 <li class="nav-item">
                     <a class="nav-link" href="{{ url_for('food.log_food') }}">Log Food</a>
                 </li>
@@ -51,14 +55,20 @@
                 </ul>
             </div>
 
-            <!-- Placeholder for Chatbot -->
+            <!-- Chatbot Integration -->
             <div class="col-md-4">
                 <h2>Chat with our AI Assistant</h2>
-                <p>This section will host a chatbot where you can interact with our AI assistant for personalized dietary insights.</p>
-                <div class="chatbot-placeholder" style="border: 1px solid #ccc; padding: 20px; text-align: center;">
-                    <p>Chatbot coming soon!</p>
-                    <p>Get personalized advice based on your logged foods and stats.</p>
+                <div class="chat-container" id="chat-container">
+                    <div class="chat-message bot-message">
+                        Hi! I'm your AI assistant. How can I help you today?
+                    </div>
                 </div>
+
+                <!-- Chatbot input form -->
+                <form id="chat-form" method="POST">
+                    <input type="text" name="user_message" class="chat-input" id="chat-input" placeholder="Type your message here..." required>
+                    <button type="submit" class="btn btn-primary">Send</button>
+                </form>
             </div>
         </div>
     </div>

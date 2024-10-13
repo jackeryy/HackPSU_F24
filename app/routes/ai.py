@@ -23,28 +23,43 @@ def chatbot():
     # Fetch user food logs
     food_logs = current_app.firestore_db.collection('food_logs') \
         .where('user_id', '==', current_user.id).stream()
-    
-    # Create a summary of the user's food logs and potential risks
+# Create a detailed summary of the user's food logs
     food_summary = ""
+    harmful_ingredients_count = 0
+
     for log in food_logs:
         log_data = log.to_dict()
-        food_summary += f"{log_data['food_name']} (Harmful Ingredients: {log_data['harmful_count']}), "
+        food_name = log_data['food_name']
+        harmful_info = log_data.get('harmful_info', [])  # Harmful ingredients insights
+        ingredients = log_data.get('ingredients', 'No ingredients listed')
+
+        # Summarize all ingredients and harmful ingredient risks
+        food_summary += f"\n- {food_name}: Ingredients = {ingredients}"
+
+        # List harmful ingredients and their risks
+        for ingredient_info in harmful_info:
+            food_summary += f"\n  * {ingredient_info['ingredient']} - {ingredient_info['risk']}"
+            harmful_ingredients_count += 1
 
     # Create personalized prompt for OpenAI
     prompt = f"""
-    You are a health assistant helping a user improve their diet. The user has logged these foods:
+    You are a nutrition assistant analyzing a user's diet and providing personalized feedback. The user has logged the following food items and ingredients:
+
     {food_summary}
     
-    The user's profile:
+    The user's profile is as follows:
     - Age: {profile['age']}
     - Weight: {profile['weight']} kg
     - Height: {profile['height']} cm
     - Allergies: {profile.get('allergies', 'None')}
     - Health Conditions: {profile.get('health_conditions', 'None')}
     
+    Based on the food logs, analyze the user's diet. Provide personalized dietary advice, suggest healthier food alternatives, and recommend foods they may be missing (such as potassium, fiber, or protein). Identify any health risks based on harmful ingredients (e.g., sugar, sodium, trans fats) and suggest what the user should avoid. If possible, highlight foods that they should consider eating more of.
+
     User's input: "{user_message}"
 
-    Based on this information, give the user personalized dietary advice. If their food intake includes harmful ingredients, suggest healthier alternatives. Also, ask them relevant questions about their lifestyle, such as water intake, exercise, and sunlight exposure. Identify any risks based on their diet and suggest improvements.
+    Your feedback should be detailed and insightful, offering the user practical solutions to improve their diet and avoid harmful ingredients.
+    You will refer to scholarly research papers (such as pubmed) to base your feedback to the user.
     """
 
     # Call OpenAI's GPT API
