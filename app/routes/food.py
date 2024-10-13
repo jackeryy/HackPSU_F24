@@ -1,4 +1,4 @@
-from app.modules.harmful_ingredients import call_ingredients
+from app.modules.harmful_ingredients import call_ingredients, all_ingredients
 from flask import Blueprint, render_template, request, redirect, url_for, flash, current_app
 from flask_login import login_required, current_user
 from datetime import datetime, timedelta
@@ -19,7 +19,7 @@ def log_food():
 
         #dictionary to store harmful ingredients
         harmful_ingredients = call_ingredients(food_name)
-        if len(harmful_ingredients == 0):
+        if not harmful_ingredients:
             status = 0
         elif len(harmful_ingredients) <= 3:
             status = 1
@@ -31,9 +31,10 @@ def log_food():
             'user_id': current_user.id,
             'food_name': food_name,
             'harmful_ingredients': harmful_ingredients,
-            'ingredients' : call_ingredients(food_name)
+            'ingredients' : all_ingredients(food_name),
             'time': time,
-            'date': date
+            'date': date,
+            'status' : status
         })
 
         flash('Food log added successfully!', 'success')
