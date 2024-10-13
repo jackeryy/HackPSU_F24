@@ -127,42 +127,9 @@ harmful_ingredients_risks ={
 
 userIngredients = {}
 #call ingredients will return the harmful ingredients in the food
-def all_ingredients(food_item):
-    headers = {
-    'x-app-id': NUTRITIONIX_APP_ID,
-    'x-app-key': NUTRITIONIX_API_KEY,
-    'Content-Type': 'application/json'
-    }
-    body = {
-        "query": food_item
-    }
-    response = requests.post(api_url, json=body, headers=headers)
-    data = response.json()
-
-    if 'branded' in data and data['branded']:
-            # Get the nix_item_id for the first branded food item
-            branded_food = data['branded'][0]
-            food_name = branded_food['food_name']
-            item_id = branded_food['nix_item_id']
-            # Fetch detailed item data using nix_item_id
-            item_details_url = f"https://trackapi.nutritionix.com/v2/search/item?nix_item_id={item_id}"
-            item_response = requests.get(item_details_url, headers=headers)
-            item_data = item_response.json()
-            # Extract ingredients
-
-            if 'foods' in item_data and item_data['foods']:
-                ingredients = item_data['foods'][0].get('nf_ingredient_statement', 'N/A')
-                if ingredients != 'N/A':
-                    print(f"Ingredients for {food_name}: {ingredients}")
-                    for ingredient in ingredients.split(','):
-                        ingredient = ingredient.strip()
-                else:
-                    print(f"No ingredient information found for {food_name}")
-                    
-    return userIngredients
-
 
 def call_ingredients(food_item):
+    userIngredients = {}
     headers = {
     'x-app-id': NUTRITIONIX_APP_ID,
     'x-app-key': NUTRITIONIX_API_KEY,
@@ -195,4 +162,40 @@ def call_ingredients(food_item):
                             userIngredients[ingredient] = harmful_ingredients_risks[ingredient]
                 else:
                     print(f"No ingredient information found for {food_name}")
+    return userIngredients
+
+def all_ingredients(food_item):
+    userIngredients = []
+    headers = {
+    'x-app-id': NUTRITIONIX_APP_ID,
+    'x-app-key': NUTRITIONIX_API_KEY,
+    'Content-Type': 'application/json'
+    }
+    body = {
+        "query": food_item
+    }
+    response = requests.post(api_url, json=body, headers=headers)
+    data = response.json()
+
+    if 'branded' in data and data['branded']:
+            # Get the nix_item_id for the first branded food item
+            branded_food = data['branded'][0]
+            food_name = branded_food['food_name']
+            item_id = branded_food['nix_item_id']
+            # Fetch detailed item data using nix_item_id
+            item_details_url = f"https://trackapi.nutritionix.com/v2/search/item?nix_item_id={item_id}"
+            item_response = requests.get(item_details_url, headers=headers)
+            item_data = item_response.json()
+            # Extract ingredients
+
+            if 'foods' in item_data and item_data['foods']:
+                ingredients = item_data['foods'][0].get('nf_ingredient_statement', 'N/A')
+                if ingredients != 'N/A':
+                    print(f"Ingredients for {food_name}: {ingredients}")
+                    for ingredient in ingredients.split(','):
+                        ingredient = ingredient.strip()
+                        userIngredients.append(ingredient)
+                else:
+                    print(f"No ingredient information found for {food_name}")
+                    
     return userIngredients
