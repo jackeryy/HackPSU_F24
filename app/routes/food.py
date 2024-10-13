@@ -4,6 +4,8 @@ from flask_login import login_required, current_user
 from datetime import datetime, timedelta
 
 food_blueprint = Blueprint('food', __name__)
+#0 means no harmful ingredients, 1 is 1-3, 2 is 3 or more
+status = 0
 
 # Route to log food consumption and view past logs
 @food_blueprint.route('/log_food', methods=['GET', 'POST'])
@@ -17,15 +19,19 @@ def log_food():
 
         #dictionary to store harmful ingredients
         harmful_ingredients = call_ingredients(food_name)
-        
-
-        
+        if len(harmful_ingredients == 0):
+            status = 0
+        elif len(harmful_ingredients) <= 3:
+            status = 1
+        else:    
+            status = 2
 
         # Save the food log in Firestore, grouped by date
         current_app.firestore_db.collection('food_logs').add({
             'user_id': current_user.id,
             'food_name': food_name,
             'harmful_ingredients': harmful_ingredients,
+            'ingredients' : call_ingredients(food_name)
             'time': time,
             'date': date
         })
