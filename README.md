@@ -1,10 +1,10 @@
 # HackPSU_F24
 
 ## Inspiration 
-The inspiration for our website is centered around how many people get chronic illness's when they age and a lot of the time this is because if undetected nutritional deficiencies in their diet. We want to build a healthier future for people around the world by giving them AI-driven advice about their diet to potentially prevent chronic illnesses in their lifetime.
+Our inspiration comes from the fact that many chronic illnesses in adulthood can often be traced back to undetected nutritional deficiencies. By addressing these deficiencies early, we can help build a healthier future. Our goal is to provide AI-driven dietary advice that empowers people to make informed choices, potentially preventing chronic illnesses throughout their lives.
 
 ## Overview 
-The website asks users to create an account where they will put in their basic health information, they will be reminded daily to log in their meals by manual search or by scanning packaged items barcodes. The AI-assistant will give the user real time feedback on the nutritional deficiencies and what chronic illnesses can be cause from their diet. The website will also give future dietary suggestions for a healthier life.
+Our website allows users to create an account and input basic health information. Users can log their meals daily through manual entry or by scanning food barcodes. With the help of an AI assistant, users receive real-time feedback on potential nutritional deficiencies and how their diet might contribute to chronic conditions. The platform also offers personalized dietary recommendations to support long-term health and well-being.
 
 ## How we built it
 We built the **AI-driven Nutritional Deficiency Detector** using a combination of Flask for the backend, Firebase for user authentication and database storage, and OpenAI's GPT-3 for personalized dietary insights. Users log their daily food intake, which is analyzed by our AI assistant to detect nutritional deficiencies and harmful ingredients in their diet. The system uses Firebase's Firestore to store food logs and user profile information, while Flask handles user authentication and manages the chatbot functionality. 
