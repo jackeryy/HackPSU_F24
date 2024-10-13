@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Harmful Ingredients</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+<body>
+    <h1>Harmful Ingredients for {{ request.args.get('food_name') }}</h1>
+    <ul>
+        {% for ingredient, effect in harmful_ingredients.items() %}
+            <li><strong>{{ ingredient }}:</strong> {{ effect }}</li>
+        {% else %}
+            <li>No harmful ingredients found for this item.</li>
+        {% endfor %}
+    </ul>
+
+    <a href="{{ url_for('log_food') }}">Go back to log</a>
+</body>
+</html>

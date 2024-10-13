@@ -53,3 +53,15 @@ def log_food():
         food_logs_by_day[date] = [log.to_dict() for log in food_logs_by_day[date]]
 
     return render_template('log_food.html', food_logs_by_day=food_logs_by_day, dates=dates)
+
+
+@food_blueprint.route('/facts')
+def facts():
+    # Get the values from the URL parameters
+    food_name = request.args.get('food_name')
+
+    harmful_ingredients = call_ingredients(food_name)
+    
+    
+
+    return render_template('facts.html', harmful_ingredients=harmful_ingredients, food_name=food_name)
