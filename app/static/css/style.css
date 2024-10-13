@@ -129,13 +129,69 @@ h1, h2, h3, h4 {
 }
 
 .green {
+    height: 15px;
+    width: 15px;
+    border-radius: 50%;
+    display: inline-block;
+    margin-right: 8px; /* Space between the dot and text */
     background-color: green;
 }
 
 .yellow {
+    height: 15px;
+    width: 15px;
+    border-radius: 50%;
+    display: inline-block;
+    margin-right: 8px; /* Space between the dot and text */
     background-color: yellow;
 }
 
 .red {
+    height: 15px;
+    width: 15px;
+    border-radius: 50%;
+    display: inline-block;
+    margin-right: 8px; /* Space between the dot and text */
     background-color: red;
+}
+
+/* Chatbot styles */
+.chat-container {
+    border: 1px solid #ccc;
+    padding: 20px;
+    height: 400px;
+    overflow-y: scroll;
+    margin-bottom: 10px;
+    background-color: #f8f9fa;
+}
+
+.chat-message {
+    margin-bottom: 10px;
+}
+
+.bot-message {
+    color: #fff;
+    background-color: #007bff;
+    padding: 10px;
+    border-radius: 5px;
+}
+
+.user-message {
+    text-align: right;
+    color: #333;
+    background-color: #e9ecef;
+    padding: 10px;
+    border-radius: 5px;
+}
+
+.chat-input {
+    width: 100%;
+    padding: 10px;
+    margin-top: 10px;
+}
+
+/* Footer styles */
+.footer {
+    background-color: #f8f9fa;
+    padding: 20px 0;
 }
