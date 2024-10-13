@@ -156,38 +156,71 @@ h1, h2, h3, h4 {
 }
 
 /* Chatbot styles */
+
+/* Chat container styling: entire chat area box */
 .chat-container {
-    border: 1px solid #ccc;
-    padding: 20px;
-    height: 400px;
-    overflow-y: scroll;
-    margin-bottom: 10px;
-    background-color: #f8f9fa;
+    border: 2px solid #ccc;  /* Outer box border */
+    border-radius: 8px;
+    padding: 10px;
+    background-color: #f9f9f9;  /* Light background color for the chat container */
+    height: 500px;  /* Overall height for the container */
+    display: flex;
+    flex-direction: column;
+    max-width: 100%;
 }
 
+/* Scrollable area for chat messages */
+.chat-messages {
+    flex-grow: 1;  /* Allow this to grow and take available space */
+    overflow-y: auto;  /* Enable vertical scrolling */
+    background-color: #fff;
+    margin-bottom: 10px;  /* Space between the messages and the input field */
+    padding: 10px;
+    border: 1px solid #ddd;  /* Border for the message area */
+    border-radius: 8px;
+    height: 350px;  /* Set a height to ensure it's scrollable */
+    max-width: 100%;
+}
+
+/* Individual message styling: border for each message */
 .chat-message {
+    padding: 10px;
     margin-bottom: 10px;
+    border-radius: 5px;
+    border: 1px solid #ccc;  /* Border for each message */
+    max-width: 100%;  /* Ensure messages do not overflow the container */
+    word-wrap: break-word;  /* Ensure long words break and wrap */
+    white-space: normal;  /* Allow text to wrap on multiple lines */
+    overflow-wrap: break-word; /* Ensure no words overflow */
 }
 
+/* Bot message styling */
 .bot-message {
-    color: #fff;
-    background-color: #007bff;
-    padding: 10px;
-    border-radius: 5px;
+    background-color: #e0e0e0;
+    text-align: left;
 }
 
+/* User message styling */
 .user-message {
+    background-color: #007bff;
+    color: white;
     text-align: right;
-    color: #333;
-    background-color: #e9ecef;
-    padding: 10px;
-    border-radius: 5px;
 }
 
+/* Input styling */
 .chat-input {
     width: 100%;
     padding: 10px;
-    margin-top: 10px;
+    border-radius: 5px;
+    margin-bottom: 10px;
+    border: 1px solid #ccc;  /* Border around input box */
+    box-sizing: border-box;
+}
+
+/* Button styling */
+.btn-primary {
+    width: 100%;
+    padding: 10px;
 }
 
 /* Footer styles */

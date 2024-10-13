@@ -1,6 +1,6 @@
 import requests
-NUTRITIONIX_APP_ID = '38216dbf'
-NUTRITIONIX_API_KEY = 'efc68bcd7238c449074ccee19e84e2c6'
+NUTRITIONIX_APP_ID = '7e9fcdfa'
+NUTRITIONIX_API_KEY = 'a8eb4a7ff5276f3e056db0f45f30d0ac'
 
 api_url = 'https://trackapi.nutritionix.com/v2/search/instant'
 

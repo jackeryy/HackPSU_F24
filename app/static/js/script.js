@@ -2,7 +2,7 @@ document.getElementById('chat-form').addEventListener('submit', function(event) 
     event.preventDefault(); // Prevent form from submitting normally
 
     var userInput = document.getElementById('chat-input').value;
-    var chatContainer = document.getElementById('chat-container');
+    var chatContainer = document.getElementById('chat-messages');
 
     // Display the user's message in the chat
     var userMessageDiv = document.createElement('div');

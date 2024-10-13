@@ -10,9 +10,10 @@ ai_blueprint = Blueprint('ai', __name__)
 openai.api_key = os.getenv('OPENAI_API_KEY')
 
 # Route to handle chatbot interactions
-@ai_blueprint.route('/chatbot', methods=['POST'])
+@ai_blueprint.route('/chatbot', methods=['GET','POST'])
 @login_required
 def chatbot():
+
     data = request.get_json()
     user_message = data.get('message')
 
@@ -23,7 +24,7 @@ def chatbot():
     # Fetch user food logs
     food_logs = current_app.firestore_db.collection('food_logs') \
         .where('user_id', '==', current_user.id).stream()
-# Create a detailed summary of the user's food logs
+    
     food_summary = ""
     harmful_ingredients_count = 0
 
@@ -64,16 +65,19 @@ def chatbot():
 
     # Call OpenAI's GPT API
     try:
-        response = openai.Completion.create(
-            engine="text-davinci-003",  # You can choose other models like "gpt-3.5-turbo"
-            prompt=prompt,
-            max_tokens=150,
-            n=1,
-            stop=None,
+        response = openai.ChatCompletion.create(
+            model="gpt-3.5-turbo",  # Use newer model name
+            messages=[
+                {"role": "system", "content": "You are a helpful assistant."},
+                {"role": "user", "content": prompt}
+            ],
+            max_tokens=50,
             temperature=0.7,
         )
-        chatbot_reply = response.choices[0].text.strip()
+        chatbot_reply = response['choices'][0]['message']['content'].strip()
     except Exception as e:
+        print(f"Error in OpenAI API call: {e}")
         chatbot_reply = "Sorry, I encountered an error processing your request."
+
 
     return jsonify({"response": chatbot_reply})

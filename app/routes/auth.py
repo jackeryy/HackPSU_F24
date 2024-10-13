@@ -80,7 +80,7 @@ def register():
 
     return render_template('register.html', form=form)
 # Home route
-@auth_blueprint.route('/home')
+@auth_blueprint.route('/home', methods=['GET', 'POST'])
 @login_required
 def home():
     return render_template('home.html', name=current_user.first_name)

@@ -6,7 +6,7 @@
     <title>Home - Nutrition Tracker</title>
     <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
-    <script src="{{ url_for('static', filename='script.js') }}"></script>
+    
 </head>
 <body>
 
@@ -59,8 +59,11 @@
             <div class="col-md-4">
                 <h2>Chat with our AI Assistant</h2>
                 <div class="chat-container" id="chat-container">
-                    <div class="chat-message bot-message">
-                        Hi! I'm your AI assistant. How can I help you today?
+                    <!-- This is where the messages will go -->
+                    <div class="chat-messages" id="chat-messages">
+                        <div class="chat-message bot-message">
+                            Hi! I'm your AI assistant. How can I help you today?
+                        </div>
                     </div>
                 </div>
 
@@ -70,6 +73,7 @@
                     <button type="submit" class="btn btn-primary">Send</button>
                 </form>
             </div>
+
         </div>
     </div>
 
@@ -78,12 +82,14 @@
         <div class="container text-center">
             <span class="text-muted">© 2024 Nutrition Tracker. All Rights Reserved.</span>
             <br>
-            <small>Developed as part of our health and wellness hackathon project.</small>
+            <small>Developed as part of our hackathon project.</small>
         </div>
     </footer>
 
+    <script src="{{ url_for('static', filename='js/script.js') }}"></script>
     <!-- Bootstrap JavaScript -->
     <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.bundle.min.js"></script>
-</body>
+
+    </body>
 </html>
