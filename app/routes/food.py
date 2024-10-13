@@ -1,5 +1,4 @@
-# /app/routes/food.py
-from harmful_ingredients import call_ingredients
+from app.modules.harmful_ingredients import call_ingredients
 from flask import Blueprint, render_template, request, redirect, url_for, flash, current_app
 from flask_login import login_required, current_user
 from datetime import datetime, timedelta
@@ -13,7 +12,6 @@ def log_food():
     if request.method == 'POST':
         # Collect form data
         food_name = request.form.get('food')
-        calories = request.form.get('calories')
         time = request.form.get('time')
         date = request.form.get('date')  # The date selected by the user
 
@@ -27,7 +25,7 @@ def log_food():
         current_app.firestore_db.collection('food_logs').add({
             'user_id': current_user.id,
             'food_name': food_name,
-            'calories': calories,
+            'harmful_ingredients': harmful_ingredients,
             'time': time,
             'date': date
         })
