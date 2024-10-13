@@ -1,30 +1,76 @@
-{% extends "base.html" %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Log Food</title>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+<body>
 
-{% block title %}Log Food{% endblock %}
+<div class="container mt-5">
+    <h2>Log Your Food</h2>
 
-{% block content %}
-    <h2>Log a Brand Name Food</h2>
-    <form method="POST">
-        {{ form.hidden_tag() }}
-        <input type="text" name="food_item" placeholder="Enter brand name food" required>
-        <button type="submit">Log Food</button>
+    <!-- Form to Add Food Log -->
+    <form method="POST" action="{{ url_for('food.log_food') }}">
+        <div class="form-group">
+            <label for="date">Select Date</label>
+            <input type="date" name="date" class="form-control" required>
+        </div>
+        <div class="form-group">
+            <label for="food">Food Name</label>
+            <input type="text" name="food" class="form-control" required>
+        </div>
+        <div class="form-group">
+            <label for="calories">Calories</label>
+            <input type="number" name="calories" class="form-control" required>
+        </div>
+        <div class="form-group">
+            <label for="time">Time of Consumption</label>
+            <input type="time" name="time" class="form-control" required>
+        </div>
+        <button type="submit" class="btn btn-primary">Log Food</button>
     </form>
 
-    {% if nutrition_info %}
-        <h3>Nutrition Information for {{ food_item }}</h3>
-        <ul>
-            <li>Calories: {{ nutrition_info.ENERC_KCAL }} kcal</li>
-            <li>Protein: {{ nutrition_info.PROCNT }} g</li>
-            <li>Carbohydrates: {{ nutrition_info.CHOCDF }} g</li>
-            <li>Fat: {{ nutrition_info.FAT }} g</li>
-        </ul>
-    {% endif %}
-    
-    {% with messages = get_flashed_messages(with_categories=true) %}
-        {% if messages %}
-            {% for category, message in messages %}
-                <div class="alert alert-{{ category }}">{{ message }}</div>
-            {% endfor %}
-        {% endif %}
-    {% endwith %}
-{% endblock %}
+    <hr>
+
+    <!-- Food Logs Table (Excel-like format) -->
+    <h3>Your Food Logs (Past 7 Days)</h3>
+    <div class="table-responsive">
+        <table class="table table-bordered">
+            <thead>
+                <tr>
+                    <!-- Display each day as a column -->
+                    {% for date in dates %}
+                    <th>{{ date }}</th>
+                    {% endfor %}
+                </tr>
+            </thead>
+            <tbody>
+                <!-- Display food logs for each day -->
+                <tr>
+                    {% for date in dates %}
+                    <td>
+                        {% if food_logs_by_day[date] %}
+                            <ul>
+                                {% for log in food_logs_by_day[date] %}
+                                <li>{{ log.food_name }} - {{ log.calories }} kcal at {{ log.time }}</li>
+                                {% endfor %}
+                            </ul>
+                        {% else %}
+                            <p>No logs</p>
+                        {% endif %}
+                    </td>
+                    {% endfor %}
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<!-- Bootstrap JavaScript -->
+<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

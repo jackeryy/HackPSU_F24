@@ -40,5 +40,12 @@ def create_app():
     # Register blueprints
     from app.routes.auth import auth_blueprint
     app.register_blueprint(auth_blueprint)
+    
+    # Add more blueprints here as needed
+    from app.routes.profile import profile_blueprint  # Profile blueprint
+    app.register_blueprint(profile_blueprint)
+
+    from app.routes.food import food_blueprint        # Food logging blueprint
+    app.register_blueprint(food_blueprint)
 
     return app
