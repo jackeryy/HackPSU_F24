@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Log Food</title>
     <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
 <body>
 <!-- Header with Navigation -->
@@ -70,12 +70,7 @@
                         {% if food_logs_by_day[date] %}
                             <ul>
                                 {% for log in food_logs_by_day[date] %}
-                                <li>{{ log.food_name }} - <span class="dot
-                                    {% if log.status == 0 %}
-                                    {% elif log.status == 1 %}yellow
-                                    {% elif log.status == 2 %}red
-                                    {% endif %}
-                                    "></span> at {{ log.time }}</li>
+                                <li>{{ log.food_name }} - <span class="dot {% if log.status == 0 %}green{% elif log.status == 1 %}yellow{% elif log.status == 2 %}red{% endif %}"></span> at {{ log.time }}</li>
                                 {% endfor %}
                             </ul>
                         {% else %}
